@@ -6,6 +6,7 @@ using UnityEngine.XR.ARSubsystems;
 public class ImageTracking : MonoBehaviour
 {
     [SerializeField] private GameObject[] numberPrefabs;
+    [SerializeField] private GameObject holePrefab;
 
     private ARTrackedImageManager trackedImageManager;
     private Dictionary<string, GameObject> spawnedPrefabs = new Dictionary<string, GameObject>();
@@ -53,7 +54,22 @@ public class ImageTracking : MonoBehaviour
     {
         string imageName = trackedImage.referenceImage.name;
         string prefix = "number_";
+        string holeImage = "mermelada";
 
+        if(imageName == holeImage)
+        {
+            Vector3 position = trackedImage.transform.position;
+            if (spawnedPrefabs.ContainsKey(holeImage))
+            {
+                spawnedPrefabs[holeImage].transform.position = position;
+                spawnedPrefabs[holeImage].SetActive(trackedImage.trackingState == TrackingState.Tracking);
+            }
+            else if (holePrefab != null)
+            {
+                GameObject prefab = Instantiate(holePrefab, position, Quaternion.identity);
+                spawnedPrefabs.Add(holeImage, prefab);
+            }
+        }
         if (imageName.StartsWith(prefix))
         {
             string numberPart = imageName.Substring(prefix.Length);

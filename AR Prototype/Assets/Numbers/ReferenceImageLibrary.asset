@@ -37,3 +37,13 @@ MonoBehaviour:
     m_SpecifySize: 0
     m_Name: number_2
     m_Texture: {fileID: 2800000, guid: 8bf9fecf9a729dc4f8166631c000c2b3, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 4741549496791056677
+      m_GuidHigh: 16074538678468032168
+    m_SerializedTextureGuid:
+      m_GuidLow: 17646260220953327309
+      m_GuidHigh: 4872802906017331595
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: mermelada
+    m_Texture: {fileID: 2800000, guid: 540776cd1c2df4e48b79a7016dac9f43, type: 3}
