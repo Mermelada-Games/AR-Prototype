@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class BallScript : MonoBehaviour
@@ -10,6 +11,7 @@ public class BallScript : MonoBehaviour
         if (other.CompareTag("Hole"))
         {
             hasWon = true;
+            SceneManager.LoadScene("ResultsScene");
             Destroy(gameObject); 
         }
     }
