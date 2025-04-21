@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class BallManager : MonoBehaviour
 {
     [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private GameObject stick;
 
     private List<GameObject> balls = new List<GameObject>(); 
     [SerializeField] private Button startButton;
@@ -13,6 +14,7 @@ public class BallManager : MonoBehaviour
     private ImageTracking imageTracker;
     private bool buttonActivated = false;
     private bool isPlaying = false;
+    private GameObject currentStick;
 
     private void Start()
     {
@@ -23,7 +25,7 @@ public class BallManager : MonoBehaviour
         }
     }
 
-    public void GenerateBall()
+    public void StartGame()
     {
         DestroyAllBalls();
         
@@ -34,6 +36,8 @@ public class BallManager : MonoBehaviour
             balls.Add(ball);
             startButton.gameObject.SetActive(false);
             isPlaying = true;
+
+            CreateStick();
         }
     }
 
@@ -62,6 +66,22 @@ public class BallManager : MonoBehaviour
             {
                 Debug.Log("Start button activated: All conditions met!");
             }
+        }
+    }
+
+    private void CreateStick()
+    {
+        Camera mainCamera = Camera.main;
+        if (mainCamera != null)
+        {
+            Vector3 cameraPosition = mainCamera.transform.position;
+            Vector3 spawnPosition = cameraPosition + new Vector3(0, -0.5f, 0);
+
+            currentStick = Instantiate(stick, spawnPosition, Quaternion.identity);
+            currentStick.transform.SetParent(mainCamera.transform); 
+            currentStick.transform.localRotation = Quaternion.Euler(90, -180, 0);
+
+
         }
     }
 }
