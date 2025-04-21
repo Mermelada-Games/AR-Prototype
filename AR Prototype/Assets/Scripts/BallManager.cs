@@ -10,24 +10,15 @@ public class BallManager : MonoBehaviour
 
     public void GenerateBall()
     {
-
         if (balls.Count > 0)
         {
             return;
         }
-
-        Camera mainCamera = Camera.main;
-        if (mainCamera != null)
+        if (ImageTracking.IsBallImageTracked)
         {
-            Vector3 cameraPosition = mainCamera.transform.position;
-            Vector3 spawnPosition = cameraPosition + new Vector3(0f, -0.5f, 1f);
-            
+            Vector3 spawnPosition = ImageTracking.BallSpawnPosition;
             GameObject ball = Instantiate(ballPrefab, spawnPosition, Quaternion.identity);
-            balls.Add(ball); 
-        }
-        else
-        {
-            Debug.LogError("Main camera not found!");
+            balls.Add(ball);
         }
     }
 

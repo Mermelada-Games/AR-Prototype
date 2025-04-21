@@ -16,10 +16,14 @@ public class ImageTracking : MonoBehaviour
     private List<GameObject> orderedPrefabs = new List<GameObject>();
     private List<GameObject> collisionSegments = new List<GameObject>();
     private GameObject planeObject;
+    
+    public static Vector3 BallSpawnPosition { get; private set; }
+    public static bool IsBallImageTracked { get; private set; }
 
     private void Awake()
     {
         trackedImageManager = GetComponent<ARTrackedImageManager>();
+        IsBallImageTracked = false;
     }
 
     private void OnEnable()
@@ -54,35 +58,26 @@ public class ImageTracking : MonoBehaviour
         }
     }
 
-    private void SpawnBall(ARTrackedImage trackedImage)
-    {
-        string imageName = trackedImage.referenceImage.name;
-        string ballImage = "ball_spawn";
-
-        if(imageName == ballImage)
-        {
-            Vector3 position = trackedImage.transform.position;
-            if (spawnedPrefabs.ContainsKey(ballImage))
-            {
-                spawnedPrefabs[ballImage].transform.position = position;
-                spawnedPrefabs[ballImage].SetActive(trackedImage.trackingState == TrackingState.Tracking);
-            }
-            else if (ballPrefab != null)
-            {
-                GameObject prefab = Instantiate(ballPrefab, position, Quaternion.identity);
-                spawnedPrefabs.Add(ballImage, prefab);
-            }
-        }
-    }
-
     private void UpdateImage(ARTrackedImage trackedImage)
     {
         string imageName = trackedImage.referenceImage.name;
         string prefix = "number_";
         string holeImage = "mermelada";
         bool shouldUpdateSegments = false;
-        
-        SpawnBall(trackedImage);
+        string ballImage = "ball_spawn";
+
+        if(imageName == ballImage)
+        {
+            Vector3 position = trackedImage.transform.position;
+            BallSpawnPosition = position;
+            IsBallImageTracked = trackedImage.trackingState == TrackingState.Tracking;
+
+            if (spawnedPrefabs.ContainsKey(ballImage))
+            {
+                spawnedPrefabs[ballImage].transform.position = position;
+                spawnedPrefabs[ballImage].SetActive(trackedImage.trackingState == TrackingState.Tracking);
+            }
+        }
         
         if (imageName == holeImage)
         {
