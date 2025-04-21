@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -16,9 +17,14 @@ public class ImageTracking : MonoBehaviour
     private List<GameObject> orderedPrefabs = new List<GameObject>();
     private List<GameObject> collisionSegments = new List<GameObject>();
     private GameObject planeObject;
-    
+    private List<Vector3> points = new List<Vector3>();
+
     public static Vector3 BallSpawnPosition { get; private set; }
     public static bool IsBallImageTracked { get; private set; }
+    public static bool IsHoleImageTracked { get; private set; }
+    public static Vector3 HolePosition { get; private set; }
+    
+    private bool AreAllWaypointsTracked => orderedPrefabs.Count == maxNumber && orderedPrefabs.All(p => p != null);
 
     private void Awake()
     {
@@ -82,6 +88,9 @@ public class ImageTracking : MonoBehaviour
         if (imageName == holeImage)
         {
             Vector3 position = trackedImage.transform.position;
+            HolePosition = position;
+            IsHoleImageTracked = trackedImage.trackingState == TrackingState.Tracking;
+            
             if (spawnedPrefabs.ContainsKey(holeImage))
             {
                 spawnedPrefabs[holeImage].transform.position = position;
@@ -194,7 +203,7 @@ public class ImageTracking : MonoBehaviour
         if (planeObject != null)
             Destroy(planeObject);
 
-        List<Vector3> points = new List<Vector3>();
+        points.Clear(); 
         foreach (GameObject prefab in orderedPrefabs)
         {
             if (prefab != null)
@@ -251,5 +260,51 @@ public class ImageTracking : MonoBehaviour
         
         MeshCollider meshCollider = planeObject.AddComponent<MeshCollider>();
         meshCollider.sharedMesh = mesh;
+    }
+    
+    public bool IsPointInsideCourse(Vector3 point)
+    {
+        if (planeObject == null || points.Count < 3)
+            return false;
+            
+        Vector2 point2D = new Vector2(point.x, point.z);
+        List<Vector2> polygon = new List<Vector2>();
+        
+        foreach (Vector3 vert in points)
+        {
+            polygon.Add(new Vector2(vert.x, vert.z));
+        }
+        
+        return IsPointInPolygon(point2D, polygon);
+    }
+    
+    private bool IsPointInPolygon(Vector2 point, List<Vector2> polygon)
+    {
+        int i, j;
+        bool result = false;
+        for (i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
+        {
+            if ((polygon[i].y > point.y) != (polygon[j].y > point.y) &&
+                (point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x))
+            {
+                result = !result;
+            }
+        }
+        return result;
+    }
+    
+    public bool AreAllPointsTracked()
+    {
+        return AreAllWaypointsTracked && IsBallImageTracked && IsHoleImageTracked;
+    }
+    
+    public bool AreSpawnAndHoleInsideCourse()
+    {
+        return IsPointInsideCourse(BallSpawnPosition) && IsPointInsideCourse(HolePosition);
+    }
+    
+    public bool CanStartGame()
+    {
+        return AreAllPointsTracked() && AreSpawnAndHoleInsideCourse();
     }
 }

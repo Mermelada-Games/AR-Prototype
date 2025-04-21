@@ -1107,6 +1107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ballPrefab: {fileID: 1365822190463589191, guid: afd5f4275e51e3f4197b2d2251784eb9,
     type: 3}
+  startButton: {fileID: 1465527779}
 --- !u!4 &1582868195
 Transform:
   m_ObjectHideFlags: 0
