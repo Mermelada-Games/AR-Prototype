@@ -67,3 +67,13 @@ MonoBehaviour:
     m_SpecifySize: 0
     m_Name: number_4
     m_Texture: {fileID: 2800000, guid: c090a10046375604bab594f1732ef99b, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 4689550955201098064
+      m_GuidHigh: 11572537739271897735
+    m_SerializedTextureGuid:
+      m_GuidLow: 15016305409867772313
+      m_GuidHigh: 17112564101751481226
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: ball_spawn
+    m_Texture: {fileID: 2800000, guid: e1f1f199a235d0648aa3ff60620a7ced, type: 3}

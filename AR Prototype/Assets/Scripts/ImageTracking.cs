@@ -7,6 +7,7 @@ public class ImageTracking : MonoBehaviour
 {
     [SerializeField] private GameObject[] numberPrefabs;
     [SerializeField] private GameObject holePrefab;
+    [SerializeField] private GameObject ballPrefab;
 
     private ARTrackedImageManager trackedImageManager;
     private Dictionary<string, GameObject> spawnedPrefabs = new Dictionary<string, GameObject>();
@@ -50,11 +51,33 @@ public class ImageTracking : MonoBehaviour
         }
     }
 
+    private void SpawnBall(ARTrackedImage trackedImage)
+    {
+        string imageName = trackedImage.referenceImage.name;
+        string ballImage = "ball_spawn";
+
+        if(imageName == ballImage)
+        {
+            Vector3 position = trackedImage.transform.position;
+            if (spawnedPrefabs.ContainsKey(ballImage))
+            {
+                spawnedPrefabs[ballImage].transform.position = position;
+                spawnedPrefabs[ballImage].SetActive(trackedImage.trackingState == TrackingState.Tracking);
+            }
+            else if (ballPrefab != null)
+            {
+                GameObject prefab = Instantiate(ballPrefab, position, Quaternion.identity);
+                spawnedPrefabs.Add(ballImage, prefab);
+            }
+        }
+    }
     private void UpdateImage(ARTrackedImage trackedImage)
     {
         string imageName = trackedImage.referenceImage.name;
         string prefix = "number_";
         string holeImage = "mermelada";
+
+        SpawnBall(trackedImage);
 
         if(imageName == holeImage)
         {
