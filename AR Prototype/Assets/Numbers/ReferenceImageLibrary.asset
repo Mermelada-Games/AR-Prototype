@@ -47,3 +47,23 @@ MonoBehaviour:
     m_SpecifySize: 0
     m_Name: mermelada
     m_Texture: {fileID: 2800000, guid: 540776cd1c2df4e48b79a7016dac9f43, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5357978900831700514
+      m_GuidHigh: 6794922312295791274
+    m_SerializedTextureGuid:
+      m_GuidLow: 4126565855731178794
+      m_GuidHigh: 16742577577438836696
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: number_3
+    m_Texture: {fileID: 2800000, guid: 451cdd2a81c83944d877a9c7999559e8, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5615791295672917139
+      m_GuidHigh: 9719772842762915220
+    m_SerializedTextureGuid:
+      m_GuidLow: 6198156192436494592
+      m_GuidHigh: 11239065420588955066
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: number_4
+    m_Texture: {fileID: 2800000, guid: c090a10046375604bab594f1732ef99b, type: 3}
