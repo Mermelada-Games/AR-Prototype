@@ -209,6 +209,10 @@ public class ImageTracking : MonoBehaviour
         MeshRenderer meshRenderer = planeObject.AddComponent<MeshRenderer>();
         meshRenderer.material = planeMaterial;
 
+        Rigidbody rb = planeObject.AddComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.useGravity = false;
+
         Mesh mesh = new Mesh();
         meshFilter.mesh = mesh;
 
@@ -244,5 +248,8 @@ public class ImageTracking : MonoBehaviour
         mesh.uv = uv;
         
         mesh.RecalculateBounds();
+        
+        MeshCollider meshCollider = planeObject.AddComponent<MeshCollider>();
+        meshCollider.sharedMesh = mesh;
     }
 }
