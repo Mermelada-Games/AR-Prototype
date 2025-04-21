@@ -8,6 +8,7 @@ public class ImageTracking : MonoBehaviour
     [SerializeField] private GameObject[] numberPrefabs;
     [SerializeField] private GameObject holePrefab;
     [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private int maxNumber;
 
     private ARTrackedImageManager trackedImageManager;
     private Dictionary<string, GameObject> spawnedPrefabs = new Dictionary<string, GameObject>();
@@ -71,15 +72,17 @@ public class ImageTracking : MonoBehaviour
             }
         }
     }
+
     private void UpdateImage(ARTrackedImage trackedImage)
     {
         string imageName = trackedImage.referenceImage.name;
         string prefix = "number_";
         string holeImage = "mermelada";
-
+        bool shouldUpdateSegments = false;
+        
         SpawnBall(trackedImage);
-
-        if(imageName == holeImage)
+        
+        if (imageName == holeImage)
         {
             Vector3 position = trackedImage.transform.position;
             if (spawnedPrefabs.ContainsKey(holeImage))
@@ -93,17 +96,23 @@ public class ImageTracking : MonoBehaviour
                 spawnedPrefabs.Add(holeImage, prefab);
             }
         }
-        if (imageName.StartsWith(prefix))
+        else if (imageName.StartsWith(prefix))
         {
             string numberPart = imageName.Substring(prefix.Length);
 
-            if (int.TryParse(numberPart, out int number) && number >= 0 && number < numberPrefabs.Length)
+            if (int.TryParse(numberPart, out int number) && number > 0 && number <= maxNumber)
             {
+                number -= 1;
                 Vector3 position = trackedImage.transform.position;
 
                 if (spawnedPrefabs.ContainsKey(imageName))
                 {
-                    spawnedPrefabs[imageName].transform.position = position;
+                    Vector3 oldPosition = spawnedPrefabs[imageName].transform.position;
+                    if (Vector3.Distance(oldPosition, position) > 0.01f)
+                    {
+                        spawnedPrefabs[imageName].transform.position = position;
+                        shouldUpdateSegments = true;
+                    }
                     spawnedPrefabs[imageName].SetActive(trackedImage.trackingState == TrackingState.Tracking);
                 }
                 else if (numberPrefabs[number] != null)
@@ -116,12 +125,13 @@ public class ImageTracking : MonoBehaviour
                         orderedPrefabs.Add(null);
                     }
                     orderedPrefabs[number] = prefab;
-
+                    shouldUpdateSegments = true;
                 }
-        
-                UpdateSegments();
             }
         }
+
+        if (shouldUpdateSegments)
+            UpdateSegments();
     }
 
     private void UpdateSegments()
@@ -139,27 +149,43 @@ public class ImageTracking : MonoBehaviour
 
             if (a != null && b != null)
             {
-                Vector3 start = a.transform.position;
-                Vector3 end = b.transform.position;
-                Vector3 center = (start + end) / 2;
-                Vector3 direction = end - start;
-                float length = direction.magnitude;
-
-                GameObject segment = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                segment.name = $"Segment_{i}_{i + 1}";
-                segment.transform.position = center;
-                segment.transform.rotation = Quaternion.LookRotation(direction.normalized);
-                segment.transform.localScale = new Vector3(0.01f, 0.01f, length);
-
-                BoxCollider collider = segment.GetComponent<BoxCollider>();
-                if (collider == null)
-                {
-                    collider = segment.AddComponent<BoxCollider>();
-                }
-                collider.isTrigger = false;
-
-                collisionSegments.Add(segment);
+                CreateSegment(a, b, $"Segment_{i}_{i + 1}");
             }
         }
+        
+        if (orderedPrefabs.Count > 1)
+        {
+            GameObject first = orderedPrefabs[0];
+            GameObject last = orderedPrefabs[orderedPrefabs.Count - 1];
+
+            if (first != null && last != null)
+            {
+                CreateSegment(last, first, $"Segment_{orderedPrefabs.Count - 1}_0");
+            }
+        }
+    }
+
+    private void CreateSegment(GameObject a, GameObject b, string segmentName)
+    {
+        Vector3 start = a.transform.position;
+        Vector3 end = b.transform.position;
+        Vector3 center = (start + end) / 2;
+        Vector3 direction = end - start;
+        float length = direction.magnitude;
+
+        GameObject segment = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        segment.name = segmentName;
+        segment.transform.position = center;
+        segment.transform.rotation = Quaternion.LookRotation(direction.normalized);
+        segment.transform.localScale = new Vector3(0.01f, 0.01f, length);
+
+        BoxCollider collider = segment.GetComponent<BoxCollider>();
+        if (collider == null)
+        {
+            collider = segment.AddComponent<BoxCollider>();
+        }
+        collider.isTrigger = false;
+
+        collisionSegments.Add(segment);
     }
 }

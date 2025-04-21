@@ -1302,6 +1302,7 @@ MonoBehaviour:
     type: 3}
   ballPrefab: {fileID: 1365822190463589191, guid: afd5f4275e51e3f4197b2d2251784eb9,
     type: 3}
+  maxNumber: 4
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
