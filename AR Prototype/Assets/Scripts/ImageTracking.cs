@@ -9,11 +9,13 @@ public class ImageTracking : MonoBehaviour
     [SerializeField] private GameObject holePrefab;
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private int maxNumber;
+    [SerializeField] private Material planeMaterial;
 
     private ARTrackedImageManager trackedImageManager;
     private Dictionary<string, GameObject> spawnedPrefabs = new Dictionary<string, GameObject>();
     private List<GameObject> orderedPrefabs = new List<GameObject>();
     private List<GameObject> collisionSegments = new List<GameObject>();
+    private GameObject planeObject;
 
     private void Awake()
     {
@@ -131,7 +133,10 @@ public class ImageTracking : MonoBehaviour
         }
 
         if (shouldUpdateSegments)
+        {
             UpdateSegments();
+            CreatePlane();
+        }
     }
 
     private void UpdateSegments()
@@ -187,5 +192,62 @@ public class ImageTracking : MonoBehaviour
         collider.isTrigger = false;
 
         collisionSegments.Add(segment);
+    }
+
+    private void CreatePlane()
+    {
+        if (planeObject != null)
+            Destroy(planeObject);
+
+        List<Vector3> points = new List<Vector3>();
+        foreach (GameObject prefab in orderedPrefabs)
+        {
+            if (prefab != null)
+                points.Add(prefab.transform.position);
+        }
+
+        if (points.Count < 3)
+            return;
+
+        planeObject = new GameObject("GolfPlane");
+        MeshFilter meshFilter = planeObject.AddComponent<MeshFilter>();
+        MeshRenderer meshRenderer = planeObject.AddComponent<MeshRenderer>();
+        meshRenderer.material = planeMaterial;
+
+        Mesh mesh = new Mesh();
+        meshFilter.mesh = mesh;
+
+        Vector3 normal = Vector3.Cross(points[1] - points[0], points[2] - points[0]).normalized;
+
+        if (normal.y < 0)
+            normal = -normal;
+        
+        Vector3[] vertices = points.ToArray();
+        mesh.vertices = vertices;
+        
+        int[] triangles = new int[(points.Count - 2) * 3];
+        for (int i = 0; i < points.Count - 2; i++)
+        {
+            triangles[i * 3] = 0;
+            triangles[i * 3 + 1] = i + 1;
+            triangles[i * 3 + 2] = i + 2;
+        }
+        mesh.triangles = triangles;
+
+        Vector3[] normals = new Vector3[vertices.Length];
+        for (int i = 0; i < normals.Length; i++)
+        {
+            normals[i] = normal;
+        }
+        mesh.normals = normals;
+
+        Vector2[] uv = new Vector2[vertices.Length];
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            uv[i] = new Vector2(vertices[i].x, vertices[i].z);
+        }
+        mesh.uv = uv;
+        
+        mesh.RecalculateBounds();
     }
 }
