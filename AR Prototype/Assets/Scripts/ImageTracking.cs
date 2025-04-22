@@ -68,7 +68,7 @@ public class ImageTracking : MonoBehaviour
     {
         string imageName = trackedImage.referenceImage.name;
         string prefix = "number_";
-        string holeImage = "mermelada";
+        string holeImage = "hole";
         bool shouldUpdateSegments = false;
         string ballImage = "ball_spawn";
 

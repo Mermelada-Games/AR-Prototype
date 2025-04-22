@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c39bb24e2bd7a482ca08117fb44b8e44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Image: {fileID: 2800000, guid: 540776cd1c2df4e48b79a7016dac9f43, type: 3}
+  m_Image: {fileID: 2800000, guid: 62beef039bbff554ab29f8ad37f76d59, type: 3}
   m_ImagePhysicalSizeMeters: {x: 0.5, y: 0.5}
 --- !u!1 &1169888354565872578
 GameObject:
@@ -684,7 +684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c39bb24e2bd7a482ca08117fb44b8e44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Image: {fileID: 2800000, guid: e1f1f199a235d0648aa3ff60620a7ced, type: 3}
+  m_Image: {fileID: 2800000, guid: b52f4e892ba47184386ab00d7447afc2, type: 3}
   m_ImagePhysicalSizeMeters: {x: 0.5, y: 0.5}
 --- !u!1 &6281046013519531689
 GameObject:
