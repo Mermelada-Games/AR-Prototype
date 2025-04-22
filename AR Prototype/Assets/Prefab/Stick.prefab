@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2269036091398103097}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Club
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 8501503547463480238}
   m_Layer: 0
   m_Name: base
-  m_TagString: Untagged
+  m_TagString: Club
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 2186703121184008529}
   m_Layer: 0
   m_Name: Stick
-  m_TagString: Untagged
+  m_TagString: Club
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
