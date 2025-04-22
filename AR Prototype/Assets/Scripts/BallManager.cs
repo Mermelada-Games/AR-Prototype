@@ -10,6 +10,7 @@ public class BallManager : MonoBehaviour
 
     private List<GameObject> balls = new List<GameObject>(); 
     [SerializeField] private Button startButton;
+    [SerializeField] private GameObject canvasElementToActivate;
     
     private ImageTracking imageTracker;
     private bool buttonActivated = false;
@@ -38,6 +39,11 @@ public class BallManager : MonoBehaviour
             isPlaying = true;
 
             CreateStick();
+
+            if (canvasElementToActivate != null)
+            {
+                canvasElementToActivate.SetActive(true);
+            }
         }
     }
 
