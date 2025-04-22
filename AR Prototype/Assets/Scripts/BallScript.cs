@@ -20,9 +20,15 @@ public class BallScript : MonoBehaviour
             {
                 scoreManager.BallEnteredHole();
             }
-            SceneManager.LoadScene("ResultsScene");
-            Destroy(gameObject); 
+            StartCoroutine(LoadResultsScene());
         }
     }
 
+    private IEnumerator LoadResultsScene()
+    {
+        yield return new WaitForSeconds(0.3f);
+        SceneManager.LoadScene("ResultsScene");
+        Destroy(gameObject); 
+
+    }
 }
