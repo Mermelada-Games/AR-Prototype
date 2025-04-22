@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using TMPro;
 
 public class ImageTracking : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class ImageTracking : MonoBehaviour
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private int maxNumber;
     [SerializeField] private Material planeMaterial;
+    
+    [SerializeField] private TextMeshProUGUI trackedCountText;
+    [SerializeField] private TextMeshProUGUI ballStatusText;
+    [SerializeField] private TextMeshProUGUI holeStatusText;
 
     private ARTrackedImageManager trackedImageManager;
     private Dictionary<string, GameObject> spawnedPrefabs = new Dictionary<string, GameObject>();
@@ -40,6 +45,11 @@ public class ImageTracking : MonoBehaviour
     private void OnDisable()
     {
         trackedImageManager.trackedImagesChanged -= OnTrackedImagesChanged;
+    }
+
+    private void Update()
+    {
+        UpdateUI();
     }
 
     private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs)
@@ -291,6 +301,20 @@ public class ImageTracking : MonoBehaviour
             }
         }
         return result;
+    }
+
+    private void UpdateUI()
+    {
+        bool allPointsTracked = orderedPrefabs.Count(p => p != null) == maxNumber;
+    
+        trackedCountText.text = $"Tracked Points: {orderedPrefabs.Count(p => p != null)}/{maxNumber}";
+        trackedCountText.color = allPointsTracked ? Color.green : Color.red;
+    
+        ballStatusText.text = IsBallImageTracked ? "Ball Tracked" : "Ball Not Tracked";
+        ballStatusText.color = IsBallImageTracked ? Color.green : Color.red;
+    
+        holeStatusText.text = IsHoleImageTracked ? "Hole Tracked" : "Hole Not Tracked";
+        holeStatusText.color = IsHoleImageTracked ? Color.green : Color.red;
     }
     
     public bool AreAllPointsTracked()
