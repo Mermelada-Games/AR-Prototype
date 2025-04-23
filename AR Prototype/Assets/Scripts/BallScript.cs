@@ -5,7 +5,14 @@ using UnityEngine;
 
 public class BallScript : MonoBehaviour
 {
+    private AudioManager audioManager;
     private bool hasWon = false;
+
+    private void Start()
+    {
+        audioManager = AudioManager.instance;
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Hole") && !hasWon)
@@ -19,6 +26,10 @@ public class BallScript : MonoBehaviour
             if (scoreManager != null)
             {
                 scoreManager.BallEnteredHole();
+            }
+            if (audioManager != null)
+            {
+                audioManager.PlayWinAudio();
             }
             StartCoroutine(LoadResultsScene());
         }
