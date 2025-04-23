@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: d02c5476fc7007b4f81e7747318af7b9
   - enabled: 1
-    path: Assets/Scenes/TestScene.unity
+    path: Assets/Scenes/Level1.unity
     guid: f97eef9baa96c604b9ad79c30f400dde
   - enabled: 1
     path: Assets/Scenes/LevelSelector.unity
@@ -17,6 +17,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ResultsScene.unity
     guid: eb961ee0fda84ac45b0bec06ca754579
+  - enabled: 1
+    path: Assets/Scenes/Level2.unity
+    guid: bf5e63a75afcb664889c45ca480dcb04
+  - enabled: 1
+    path: Assets/Scenes/Level3.unity
+    guid: 2dd1b5d02d9d72044a7bc04be048c6ed
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ee72d15cf39dd748a13eac57397b9af,
       type: 2}
